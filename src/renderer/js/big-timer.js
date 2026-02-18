@@ -1,8 +1,7 @@
 // Big Timer Overlay Module
-// Shows fullscreen countdown:
-// - Before prayer time: countdown to prayer (e.g. 10 minutes)
-// - At prayer time: iqamah countdown (e.g. 10 minutes)
-// Beep sound plays only in last 15 seconds of each phase
+// Fasa 1: Pre-prayer countdown (10 minit) - bunyi 15s terakhir
+// Fasa 2: Telah Masuk Waktu (15 saat) - bunyi penuh
+// Fasa 3: Iqamah countdown (10 minit) - bunyi 15s terakhir
 const BigTimer = (() => {
   const PRAYER_LABELS = {
     subuh: 'Subuh',
@@ -21,9 +20,9 @@ const BigTimer = (() => {
   let intervalId = null;
   let warningMinutes = 10;
   let iqamahMinutes = 10;
-  let currentPhase = null; // null, 'pre-prayer', 'iqamah'
+  let waktuSeconds = 15; // tempoh popup "Telah Masuk Waktu"
+  let currentPhase = null; // null, 'pre-prayer', 'waktu', 'iqamah'
   let currentPrayer = null;
-  let iqamahTriggered = new Set();
   let lastDate = null;
   let soundEnabled = true;
   let beepAudio = null;
@@ -34,7 +33,7 @@ const BigTimer = (() => {
     if (!beepAudio) {
       beepAudio = new Audio('/audio/beep.mp3');
       beepAudio.loop = true;
-      beepAudio.volume = 0.8;
+      beepAudio.volume = 1.0;
       beepAudio.preload = 'auto';
     }
   }
@@ -59,11 +58,6 @@ const BigTimer = (() => {
       beepAudio.currentTime = 0;
       isPlaying = false;
     }
-  }
-
-  // Increase volume for last 30 seconds
-  function setBeepVolume(vol) {
-    if (beepAudio) beepAudio.volume = vol;
   }
 
   function init(settings) {
@@ -97,9 +91,7 @@ const BigTimer = (() => {
     const now = new Date();
     const todayStr = now.toDateString();
 
-    if (lastDate && lastDate !== todayStr) {
-      iqamahTriggered.clear();
-    }
+    if (lastDate && lastDate !== todayStr) lastDate = todayStr;
     lastDate = todayStr;
 
     const nowMinutes = now.getHours() * 60 + now.getMinutes();
@@ -116,9 +108,10 @@ const BigTimer = (() => {
 
       const prayerSeconds = prayerMinutes * 60;
       const preStartSeconds = (prayerMinutes - warningMinutes) * 60;
-      const iqamahEndSeconds = prayerSeconds + (iqamahMinutes * 60);
+      const waktuEndSeconds = prayerSeconds + waktuSeconds;
+      const iqamahEndSeconds = waktuEndSeconds + (iqamahMinutes * 60);
 
-      // Phase 1: Pre-prayer countdown
+      // Fasa 1: Pre-prayer countdown (10 minit sebelum waktu)
       if (nowSeconds >= preStartSeconds && nowSeconds < prayerSeconds) {
         const diff = prayerSeconds - nowSeconds;
         showPrePrayer(prayer, diff);
@@ -126,8 +119,15 @@ const BigTimer = (() => {
         break;
       }
 
-      // Phase 2: Iqamah countdown
-      if (nowSeconds >= prayerSeconds && nowSeconds < iqamahEndSeconds) {
+      // Fasa 2: Telah Masuk Waktu (15 saat tepat waktu solat)
+      if (nowSeconds >= prayerSeconds && nowSeconds < waktuEndSeconds) {
+        showWaktu(prayer);
+        showOverlay = true;
+        break;
+      }
+
+      // Fasa 3: Iqamah countdown (10 minit selepas waktu)
+      if (nowSeconds >= waktuEndSeconds && nowSeconds < iqamahEndSeconds) {
         const diff = iqamahEndSeconds - nowSeconds;
         showIqamah(prayer, diff);
         showOverlay = true;
@@ -140,10 +140,11 @@ const BigTimer = (() => {
     }
   }
 
+  // Fasa 1: Countdown sebelum waktu solat
   function showPrePrayer(prayer, secondsLeft) {
     if (currentPhase !== 'pre-prayer' || currentPrayer !== prayer) {
+      overlayEl.classList.remove('waktu-phase', 'iqamah-phase', 'warning');
       overlayEl.classList.add('active');
-      overlayEl.classList.remove('iqamah-phase');
       currentPhase = 'pre-prayer';
       currentPrayer = prayer;
       subtitleEl.textContent = 'Azan akan berkumandang sebentar lagi';
@@ -152,29 +153,45 @@ const BigTimer = (() => {
     titleEl.textContent = `Waktu ${PRAYER_LABELS[prayer]} Dalam`;
     countdownEl.textContent = formatCountdown(secondsLeft);
 
-    // Warning pulse when under 60 seconds
     if (secondsLeft <= 60) {
       overlayEl.classList.add('warning');
     } else {
       overlayEl.classList.remove('warning');
     }
 
-    // Bunyi hanya pada 15 saat terakhir
+    // Bunyi hanya 15 saat terakhir
     if (secondsLeft <= 15 && secondsLeft > 0) {
-      setBeepVolume(1.0);
       startBeep();
     } else {
       stopBeep();
     }
   }
 
+  // Fasa 2: Popup "Telah Masuk Waktu" selama 15 saat dengan bunyi
+  function showWaktu(prayer) {
+    if (currentPhase !== 'waktu' || currentPrayer !== prayer) {
+      overlayEl.classList.remove('iqamah-phase', 'warning');
+      overlayEl.classList.add('active', 'waktu-phase');
+      currentPhase = 'waktu';
+      currentPrayer = prayer;
+      titleEl.textContent = 'Telah Masuk Waktu';
+      subtitleEl.textContent = 'Sila bersedia untuk mendirikan solat';
+      startBeep(); // bunyi penuh 15 saat
+    }
+
+    // Tunjuk nama solat besar dalam countdown element
+    countdownEl.textContent = PRAYER_LABELS[prayer].toUpperCase();
+  }
+
+  // Fasa 3: Iqamah countdown
   function showIqamah(prayer, secondsLeft) {
     if (currentPhase !== 'iqamah' || currentPrayer !== prayer) {
+      overlayEl.classList.remove('waktu-phase', 'warning');
       overlayEl.classList.add('active', 'iqamah-phase');
-      overlayEl.classList.remove('warning');
       currentPhase = 'iqamah';
       currentPrayer = prayer;
       subtitleEl.textContent = 'Solat akan didirikan sebentar lagi';
+      stopBeep();
     }
 
     titleEl.textContent = `Iqamah ${PRAYER_LABELS[prayer]}`;
@@ -186,9 +203,8 @@ const BigTimer = (() => {
       overlayEl.classList.remove('warning');
     }
 
-    // Bunyi hanya pada 15 saat terakhir
+    // Bunyi hanya 15 saat terakhir
     if (secondsLeft <= 15 && secondsLeft > 0) {
-      setBeepVolume(1.0);
       startBeep();
     } else {
       stopBeep();
@@ -196,7 +212,7 @@ const BigTimer = (() => {
   }
 
   function hideOverlay() {
-    overlayEl.classList.remove('active', 'iqamah-phase', 'warning');
+    overlayEl.classList.remove('active', 'waktu-phase', 'iqamah-phase', 'warning');
     currentPhase = null;
     currentPrayer = null;
     stopBeep();
@@ -215,28 +231,33 @@ const BigTimer = (() => {
 
   function toggleSound(enabled) {
     soundEnabled = enabled !== undefined ? enabled : !soundEnabled;
-    console.log('[BigTimer] Sound:', soundEnabled ? 'ON' : 'OFF');
     return soundEnabled;
   }
 
-  // Test mode: simulate pre-prayer (15s) then iqamah (15s)
+  // Test: pre-prayer 5s → waktu 15s → iqamah 5s
   function test() {
     if (intervalId) clearInterval(intervalId);
 
-    let testInterval = null;
     let phase = 'pre-prayer';
-    let secondsLeft = 15;
+    let secondsLeft = 5;
+    console.log('[BigTimer TEST] pre-prayer(5s) → waktu(15s) → iqamah(5s)');
 
-    console.log('[BigTimer TEST] Starting demo - 15s pre-prayer then 15s iqamah (with MP3 beep)');
-
-    testInterval = setInterval(() => {
+    const testInterval = setInterval(() => {
       if (phase === 'pre-prayer') {
         showPrePrayer('zohor', secondsLeft);
         secondsLeft--;
         if (secondsLeft < 0) {
           stopBeep();
-          phase = 'iqamah';
+          phase = 'waktu';
           secondsLeft = 15;
+        }
+      } else if (phase === 'waktu') {
+        showWaktu('zohor');
+        secondsLeft--;
+        if (secondsLeft < 0) {
+          stopBeep();
+          phase = 'iqamah';
+          secondsLeft = 5;
         }
       } else if (phase === 'iqamah') {
         showIqamah('zohor', secondsLeft);
@@ -245,7 +266,7 @@ const BigTimer = (() => {
           hideOverlay();
           clearInterval(testInterval);
           intervalId = setInterval(check, 1000);
-          console.log('[BigTimer TEST] Demo complete');
+          console.log('[BigTimer TEST] selesai');
         }
       }
     }, 1000);

@@ -107,7 +107,7 @@ body {
 .bg-image-area {
   position: absolute;
   inset: 0;
-  background: url('/images/desa-murni-batik.jpg') center/cover no-repeat;
+  background: var(--color-bg-primary);
   z-index: 0;
 }
 
@@ -117,71 +117,72 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  padding: 20px 40px;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, transparent 100%);
+  bottom: 0;
+  padding: 40px 60px;
+  background: transparent;
   z-index: 2;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .announcement-text {
-  font-size: var(--font-size-announcement);
-  line-height: 1.5;
+  font-size: 36px;
+  line-height: 1.6;
   color: #fff;
-  text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+  max-width: 90%;
 }
 
 /* Hadith slide styling */
 .hadith-label {
-  font-size: 16px;
+  font-size: 24px;
   text-transform: uppercase;
-  letter-spacing: 3px;
+  letter-spacing: 4px;
   color: var(--color-accent);
-  margin-bottom: 8px;
+  margin-bottom: 16px;
   font-weight: 700;
 }
 
 .hadith-text {
-  font-size: var(--font-size-announcement);
+  font-size: 38px;
   line-height: 1.6;
   color: #fff;
   font-style: italic;
-  text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
 }
 
-/* Quran overlay - bottom of image area */
+/* Quran overlay - bottom of display area */
 .quran-overlay {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 16px 40px;
-  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+  padding: 20px 60px;
+  background: rgba(0,0,0,0.3);
   z-index: 2;
   text-align: center;
 }
 
 .quran-arabic {
   font-family: var(--font-arabic);
-  font-size: var(--font-size-quran-arabic);
+  font-size: 40px;
   line-height: 1.6;
   color: var(--color-accent);
   direction: rtl;
-  text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .quran-translation {
-  font-size: var(--font-size-quran-translation);
+  font-size: 24px;
   color: #fff;
   line-height: 1.4;
   font-style: italic;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
 }
 
 .quran-reference {
-  font-size: 14px;
+  font-size: 18px;
   color: var(--color-accent);
-  margin-top: 4px;
+  margin-top: 6px;
   font-weight: 600;
 }
 
@@ -463,6 +464,25 @@ body {
   letter-spacing: 2px;
 }
 
+/* Fasa Telah Masuk Waktu - hijau terang */
+.big-timer-overlay.waktu-phase { background: #0a2a0a; }
+.big-timer-overlay.waktu-phase .big-timer-title {
+  color: #fff;
+  font-size: 72px;
+  letter-spacing: 6px;
+}
+.big-timer-overlay.waktu-phase .big-timer-countdown {
+  color: #4CAF50;
+  font-size: 160px;
+  text-shadow: 0 0 80px rgba(76, 175, 80, 0.6);
+  letter-spacing: 8px;
+}
+.big-timer-overlay.waktu-phase .big-timer-subtitle {
+  color: #A5D6A7;
+  font-size: 40px;
+}
+
+/* Fasa Iqamah */
 .big-timer-overlay.iqamah-phase .big-timer-title { color: var(--color-accent); }
 .big-timer-overlay.iqamah-phase .big-timer-countdown {
   color: var(--color-success);
