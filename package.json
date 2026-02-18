@@ -1,0 +1,15 @@
+{
+  "name": "masjid-prayer-display",
+  "version": "1.0.0",
+  "description": "Mosque Prayer Time Display for TV/Kiosk",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "kiosk": "node server.js --kiosk"
+  },
+  "dependencies": {
+    "adhan": "^4.4.3",
+    "express": "^4.21.0",
+    "node-fetch": "^2.7.0"
+  }
+}

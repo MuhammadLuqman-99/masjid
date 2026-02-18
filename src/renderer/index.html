@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paparan Waktu Solat Masjid</title>
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+
+  <!-- Hidden file input for background image -->
+  <input type="file" id="bgImageInput" accept="image/*" style="display:none">
+
+  <!-- Settings Button (subtle, top-right) -->
+  <button class="settings-btn" id="settingsBtn" title="Tetapan (F12)">&#9881;</button>
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="header">
+    <div class="header-left">
+      <div class="mosque-logo-placeholder" id="mosqueLogo">&#9770;</div>
+      <div class="mosque-name" id="mosqueName">Masjid Al-Hidayah</div>
+    </div>
+    <div class="header-right">
+      <div class="hijri-date" id="hijriDate">-- Hijri Date --</div>
+      <div class="gregorian-date" id="gregorianDate">-- Gregorian Date --</div>
+    </div>
+  </header>
+
+  <!-- ===================== MAIN CONTENT ===================== -->
+  <div class="main-content">
+
+    <!-- LEFT: Prayer Times Panel -->
+    <div class="prayer-panel">
+
+      <!-- Digital Clock -->
+      <div class="clock-section">
+        <div class="clock-time" id="clockTime">00:00:00</div>
+        <div class="clock-period" id="clockPeriod">--</div>
+      </div>
+
+      <!-- Prayer Times List -->
+      <div class="prayer-list" id="prayerList">
+        <div class="prayer-row" data-prayer="imsak">
+          <span class="prayer-name">Imsak</span>
+          <span class="prayer-time-value" id="time-imsak">--:--</span>
+        </div>
+        <div class="prayer-row" data-prayer="subuh">
+          <span class="prayer-name">Subuh</span>
+          <span class="prayer-time-value" id="time-subuh">--:--</span>
+        </div>
+        <div class="prayer-row" data-prayer="syuruk">
+          <span class="prayer-name">Syuruk</span>
+          <span class="prayer-time-value" id="time-syuruk">--:--</span>
+        </div>
+        <div class="prayer-row" data-prayer="zohor">
+          <span class="prayer-name">Zohor</span>
+          <span class="prayer-time-value" id="time-zohor">--:--</span>
+        </div>
+        <div class="prayer-row" data-prayer="asar">
+          <span class="prayer-name">Asar</span>
+          <span class="prayer-time-value" id="time-asar">--:--</span>
+        </div>
+        <div class="prayer-row" data-prayer="maghrib">
+          <span class="prayer-name">Maghrib</span>
+          <span class="prayer-time-value" id="time-maghrib">--:--</span>
+        </div>
+        <div class="prayer-row" data-prayer="isyak">
+          <span class="prayer-name">Isyak</span>
+          <span class="prayer-time-value" id="time-isyak">--:--</span>
+        </div>
+      </div>
+
+      <!-- Countdown to next prayer -->
+      <div class="countdown-section">
+        <div class="countdown-label">Masa Berbaki</div>
+        <div class="countdown-timer" id="countdownTimer">--:--:--</div>
+        <div class="countdown-prayer-name" id="countdownPrayerName">--</div>
+      </div>
+
+      <!-- Iqamah -->
+      <div class="iqamah-section" id="iqamahSection" style="display:none;">
+        <div class="iqamah-label">Iqamah</div>
+        <div class="iqamah-time" id="iqamahTime">--:--</div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Content Panel -->
+    <div class="content-panel">
+
+      <!-- Announcements Slider -->
+      <div class="announcement-container">
+        <div class="announcement-slide slide-enter" id="announcementSlide">
+          <div class="announcement-text" id="announcementText">Selamat datang ke masjid kami</div>
+        </div>
+        <div class="announcement-dots" id="announcementDots"></div>
+      </div>
+
+      <!-- Quran Verse -->
+      <div class="quran-container">
+        <div class="quran-arabic" id="quranArabic">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+        <div class="quran-translation" id="quranTranslation">Dengan nama Allah, Yang Maha Pemurah, lagi Maha Mengasihani.</div>
+        <div class="quran-reference" id="quranReference">Al-Fatihah: 1</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===================== FOOTER TICKER ===================== -->
+  <div class="footer-ticker">
+    <span class="ticker-text" id="tickerText">Selamat datang ke masjid kami. Semoga solat anda diterima Allah SWT. | Jaga kebersihan masjid. Kebersihan sebahagian daripada iman.</span>
+  </div>
+
+  <!-- Source indicator -->
+  <div class="source-indicator" id="sourceIndicator"></div>
+
+  <!-- ===================== BIG TIMER OVERLAY ===================== -->
+  <div class="big-timer-overlay" id="bigTimerOverlay">
+    <div class="big-timer-content">
+      <div class="big-timer-icon" id="bigTimerIcon">&#9770;</div>
+      <div class="big-timer-title" id="bigTimerTitle">Waktu Solat</div>
+      <div class="big-timer-countdown" id="bigTimerCountdown">10:00</div>
+      <div class="big-timer-subtitle" id="bigTimerSubtitle"></div>
+    </div>
+  </div>
+
+  <!-- ===================== SETTINGS OVERLAY ===================== -->
+  <div class="settings-overlay" id="settingsOverlay">
+    <div class="settings-panel">
+      <h2>&#9881; Tetapan / Settings</h2>
+
+      <!-- Mosque Info -->
+      <div class="settings-group">
+        <h3>Maklumat Masjid</h3>
+        <div class="settings-row">
+          <label>Nama Masjid</label>
+          <input type="text" id="settMosqueName" placeholder="Masjid Al-Hidayah">
+        </div>
+      </div>
+
+      <!-- Zone Selection -->
+      <div class="settings-group">
+        <h3>Zon Waktu Solat (JAKIM)</h3>
+        <div class="settings-row">
+          <label>Zon</label>
+          <select id="settZone"></select>
+        </div>
+      </div>
+
+      <!-- Theme -->
+      <div class="settings-group">
+        <h3>Tema & Paparan</h3>
+        <div class="settings-row">
+          <label>Warna Utama</label>
+          <input type="color" id="settColorPrimary" value="#3D0C11">
+        </div>
+        <div class="settings-row">
+          <label>Warna Aksen</label>
+          <input type="color" id="settColorAccent" value="#D4A843">
+        </div>
+        <div class="settings-row">
+          <label>Saiz Fon</label>
+          <select id="settFontSize">
+            <option value="small">Kecil</option>
+            <option value="medium" selected>Sederhana</option>
+            <option value="large">Besar</option>
+            <option value="xlarge">Sangat Besar</option>
+          </select>
+        </div>
+        <div class="settings-row">
+          <label>Gambar Latar</label>
+          <button class="btn btn-secondary" id="settBgImage">Pilih Gambar...</button>
+        </div>
+        <div class="settings-row">
+          <label></label>
+          <button class="btn btn-secondary" id="settBgImageClear" style="font-size:12px;">Buang Gambar Latar</button>
+        </div>
+      </div>
+
+      <!-- Big Timer -->
+      <div class="settings-group">
+        <h3>Pemasa Besar</h3>
+        <div class="settings-row">
+          <label>Amaran Sebelum Solat</label>
+          <select id="settWarningMinutes">
+            <option value="5">5 minit</option>
+            <option value="10" selected>10 minit</option>
+            <option value="15">15 minit</option>
+            <option value="20">20 minit</option>
+          </select>
+        </div>
+        <div class="settings-row" style="margin-top:-8px">
+          <label></label>
+          <small style="color:var(--color-text-muted);font-size:12px">Paparan pemasa besar sebelum waktu solat masuk</small>
+        </div>
+        <div class="settings-row">
+          <label>Masa Iqamah</label>
+          <select id="settIqamahMinutes">
+            <option value="5">5 minit</option>
+            <option value="10">10 minit</option>
+            <option value="12" selected>12 minit</option>
+            <option value="15">15 minit</option>
+            <option value="20">20 minit</option>
+          </select>
+        </div>
+        <div class="settings-row" style="margin-top:-8px">
+          <label></label>
+          <small style="color:var(--color-text-muted);font-size:12px">Paparan pemasa iqamah selepas masuk waktu solat</small>
+        </div>
+      </div>
+
+      <!-- Display Mode -->
+      <div class="settings-group">
+        <h3>Mod Paparan</h3>
+        <div class="settings-row">
+          <label>Skrin Penuh</label>
+          <button class="btn btn-secondary" id="settFullscreen">Togol Skrin Penuh</button>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="settings-actions">
+        <button class="btn btn-secondary" id="settClose">Tutup</button>
+        <button class="btn btn-primary" id="settSave">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/clock.js"></script>
+  <script src="js/hijri-date.js"></script>
+  <script src="js/prayer-times.js"></script>
+  <script src="js/announcements.js"></script>
+  <script src="js/quran-verse.js"></script>
+  <script src="js/theme-manager.js"></script>
+  <script src="js/big-timer.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

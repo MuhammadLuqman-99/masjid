@@ -1,0 +1,8 @@
+node_modules/
+dist/
+*.log
+.env
+settings.json
+prayer-cache.json
+.DS_Store
+Thumbs.db

@@ -1,0 +1,80 @@
+/* Glow pulse for active prayer */
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: 0 0 10px var(--color-accent-glow), 0 0 20px var(--color-accent-glow);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--color-accent-glow), 0 0 40px var(--color-accent-glow);
+  }
+}
+
+.prayer-active {
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+/* Fade in/out for slides */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-10px); }
+}
+
+.slide-enter {
+  animation: fadeIn 0.6s ease forwards;
+}
+
+.slide-exit {
+  animation: fadeOut 0.6s ease forwards;
+}
+
+/* Ticker scroll */
+@keyframes tickerScroll {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.ticker-text {
+  animation: tickerScroll 30s linear infinite;
+}
+
+/* Clock colon blink */
+@keyframes colonBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.clock-colon {
+  animation: colonBlink 1s step-end infinite;
+}
+
+/* Countdown pulse */
+@keyframes countdownPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.countdown-timer {
+  animation: countdownPulse 2s ease-in-out infinite;
+}
+
+/* Subtle background shift to prevent burn-in */
+@keyframes bgShift {
+  0% { background-position: 0% 0%; }
+  25% { background-position: 1% 1%; }
+  50% { background-position: 0% 2%; }
+  75% { background-position: 1% 0%; }
+  100% { background-position: 0% 0%; }
+}
+
+.bg-animate {
+  animation: bgShift 120s ease-in-out infinite;
+}
+
+/* Smooth transition for content changes */
+.content-transition {
+  transition: opacity var(--transition-speed) ease;
+}
