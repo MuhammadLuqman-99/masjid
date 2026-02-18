@@ -14,21 +14,21 @@ const CACHE_FILE = path.join(__dirname, 'prayer-cache.json');
 // Default settings
 const DEFAULT_SETTINGS = {
   zone: 'TRG01',
-  mosqueName: 'Surau Desa Murni Gong Kapas',
+  mosqueName: 'Surau Desa Murni Batik Gong Kapas',
   mosqueAddress: 'Gong Kapas, Kuala Terengganu',
   theme: {
     bgPrimary: '#0D1B2A',
     bgSecondary: '#1B2838',
     accent: '#FF8C00',
     textPrimary: '#ffffff',
-    backgroundImage: '/images/desa-murni-batik.jpg',
+    backgroundImage: '',
   },
   fontSize: 'medium',
   clock: { format24h: false },
   azan: { enabled: false, volume: 0.8, warningMinutes: 10 },
-  bigTimer: { warningMinutes: 10, iqamahMinutes: 12 },
+  bigTimer: { warningMinutes: 10, iqamahMinutes: 10 },
   announcements: [
-    { type: 'text', content: 'Selamat datang ke Surau Desa Murni Gong Kapas. Semoga solat anda diterima Allah SWT.', enabled: true },
+    { type: 'text', content: 'Selamat datang ke Surau Desa Murni Batik Gong Kapas. Semoga solat anda diterima Allah SWT.', enabled: true },
     { type: 'hadith', content: '"Sesungguhnya setiap amalan itu bergantung kepada niat, dan sesungguhnya setiap orang akan mendapat apa yang diniatkannya." — Hadis Riwayat Bukhari & Muslim', enabled: true },
     { type: 'hadith', content: '"Sesiapa yang beriman kepada Allah dan Hari Akhirat, hendaklah berkata baik atau diam." — Hadis Riwayat Bukhari & Muslim', enabled: true },
     { type: 'hadith', content: '"Tidak beriman seseorang kamu sehingga dia mengasihi saudaranya seperti dia mengasihi dirinya sendiri." — Hadis Riwayat Bukhari & Muslim', enabled: true },

@@ -2,7 +2,7 @@
 title Surau Desa Murni - Paparan Waktu Solat
 echo.
 echo  ==========================================
-echo   Surau Desa Murni Gong Kapas
+echo   Surau Desa Murni Batik Gong Kapas
 echo   Paparan Waktu Solat / Prayer Display
 echo  ==========================================
 echo.
@@ -12,7 +12,8 @@ echo.
 cd /d "%~dp0"
 
 :: Tunggu 3 saat kemudian buka browser fullscreen
-start "" /min cmd /c "timeout /t 3 /nobreak >nul && start chrome --kiosk http://localhost:3000"
+:: --autoplay-policy=no-user-gesture-required = benarkan bunyi tanpa klik (penting untuk surau PC)
+start "" /min cmd /c "timeout /t 3 /nobreak >nul && start chrome --kiosk --autoplay-policy=no-user-gesture-required http://localhost:3000"
 
 :: Jalankan server
 node server.js

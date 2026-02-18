@@ -1,8 +1,8 @@
 // Big Timer Overlay Module
 // Shows fullscreen countdown:
 // - Before prayer time: countdown to prayer (e.g. 10 minutes)
-// - At prayer time: iqamah countdown (e.g. 12 minutes)
-// Uses MP3 beep sound file (plays continuously during countdown)
+// - At prayer time: iqamah countdown (e.g. 10 minutes)
+// Beep sound plays only in last 15 seconds of each phase
 const BigTimer = (() => {
   const PRAYER_LABELS = {
     subuh: 'Subuh',
@@ -20,7 +20,7 @@ const BigTimer = (() => {
   let subtitleEl = null;
   let intervalId = null;
   let warningMinutes = 10;
-  let iqamahMinutes = 12;
+  let iqamahMinutes = 10;
   let currentPhase = null; // null, 'pre-prayer', 'iqamah'
   let currentPrayer = null;
   let iqamahTriggered = new Set();
@@ -74,7 +74,7 @@ const BigTimer = (() => {
 
     if (settings) {
       warningMinutes = settings.warningMinutes || 10;
-      iqamahMinutes = settings.iqamahMinutes || 12;
+      iqamahMinutes = settings.iqamahMinutes || 10;
     }
 
     // Pre-initialize audio on first user interaction
@@ -147,7 +147,6 @@ const BigTimer = (() => {
       currentPhase = 'pre-prayer';
       currentPrayer = prayer;
       subtitleEl.textContent = 'Azan akan berkumandang sebentar lagi';
-      startBeep();
     }
 
     titleEl.textContent = `Waktu ${PRAYER_LABELS[prayer]} Dalam`;
@@ -160,11 +159,12 @@ const BigTimer = (() => {
       overlayEl.classList.remove('warning');
     }
 
-    // Louder volume for last 30 seconds
-    if (secondsLeft <= 30) {
+    // Bunyi hanya pada 15 saat terakhir
+    if (secondsLeft <= 15 && secondsLeft > 0) {
       setBeepVolume(1.0);
+      startBeep();
     } else {
-      setBeepVolume(0.8);
+      stopBeep();
     }
   }
 
@@ -175,7 +175,6 @@ const BigTimer = (() => {
       currentPhase = 'iqamah';
       currentPrayer = prayer;
       subtitleEl.textContent = 'Solat akan didirikan sebentar lagi';
-      startBeep();
     }
 
     titleEl.textContent = `Iqamah ${PRAYER_LABELS[prayer]}`;
@@ -187,11 +186,12 @@ const BigTimer = (() => {
       overlayEl.classList.remove('warning');
     }
 
-    // Louder volume for last 30 seconds
-    if (secondsLeft <= 30) {
+    // Bunyi hanya pada 15 saat terakhir
+    if (secondsLeft <= 15 && secondsLeft > 0) {
       setBeepVolume(1.0);
+      startBeep();
     } else {
-      setBeepVolume(0.8);
+      stopBeep();
     }
   }
 
