@@ -10,9 +10,13 @@ echo  Memulakan sistem... / Starting system...
 echo.
 
 cd /d "%~dp0"
+
+:: Tunggu 3 saat kemudian buka browser fullscreen
+start "" /min cmd /c "timeout /t 3 /nobreak >nul && start chrome --kiosk http://localhost:3000"
+
+:: Jalankan server
 node server.js
 
 echo.
 echo  Sistem telah ditutup. / System has stopped.
-echo  Tekan sebarang kekunci untuk keluar.
 pause >nul

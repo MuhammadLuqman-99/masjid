@@ -1,36 +1,36 @@
 :root {
-  /* Batik Desa Murni - Maroon & Gold Theme */
-  --color-bg-primary: #3D0C11;
-  --color-bg-secondary: #521721;
-  --color-bg-card: #6B2530;
-  --color-accent: #D4A843;
-  --color-accent-glow: rgba(212, 168, 67, 0.4);
-  --color-accent-subtle: rgba(212, 168, 67, 0.2);
+  /* Desa Murni Batik - Orange & Maroon (TV Optimized) */
+  --color-bg-primary: #3A1800;
+  --color-bg-secondary: #4A2208;
+  --color-bg-card: #5C3015;
+  --color-accent: #FF8C00;
+  --color-accent-glow: rgba(255, 140, 0, 0.5);
+  --color-accent-subtle: rgba(255, 140, 0, 0.25);
   --color-text-primary: #ffffff;
-  --color-text-secondary: #E8C8A0;
-  --color-text-muted: #B08860;
-  --color-highlight: #FFD700;
-  --color-success: #4caf50;
-  --color-prayer-active: #D4A843;
-  --color-prayer-next-bg: rgba(212, 168, 67, 0.15);
-  --color-header-bg: rgba(61, 12, 17, 0.95);
-  --color-footer-bg: rgba(40, 8, 12, 0.95);
-  --color-overlay: rgba(61, 12, 17, 0.85);
+  --color-text-secondary: #FFE0B2;
+  --color-text-muted: #D4A060;
+  --color-highlight: #FFA000;
+  --color-success: #66BB6A;
+  --color-prayer-active: #FF8C00;
+  --color-prayer-next-bg: rgba(255, 140, 0, 0.2);
+  --color-header-bg: rgba(58, 24, 0, 0.95);
+  --color-footer-bg: rgba(45, 18, 0, 0.95);
+  --color-overlay: rgba(58, 24, 0, 0.7);
 
   --font-primary: 'Segoe UI', 'Poppins', Tahoma, Geneva, Verdana, sans-serif;
   --font-arabic: 'Traditional Arabic', 'Amiri', 'Scheherazade New', serif;
 
-  --font-size-clock: 72px;
-  --font-size-clock-label: 18px;
-  --font-size-prayer-name: 24px;
-  --font-size-prayer-time: 28px;
-  --font-size-countdown: 20px;
-  --font-size-header: 28px;
-  --font-size-date: 16px;
-  --font-size-quran-arabic: 32px;
-  --font-size-quran-translation: 18px;
-  --font-size-announcement: 22px;
-  --font-size-ticker: 18px;
+  --font-size-clock: 90px;
+  --font-size-clock-label: 22px;
+  --font-size-prayer-name: 32px;
+  --font-size-prayer-time: 36px;
+  --font-size-countdown: 28px;
+  --font-size-header: 34px;
+  --font-size-date: 20px;
+  --font-size-quran-arabic: 40px;
+  --font-size-quran-translation: 24px;
+  --font-size-announcement: 28px;
+  --font-size-ticker: 22px;
 
   --border-radius: 12px;
   --border-radius-sm: 8px;
@@ -40,31 +40,31 @@
 
 /* Font size variants */
 .font-small {
-  --font-size-clock: 56px;
-  --font-size-prayer-name: 20px;
-  --font-size-prayer-time: 22px;
-  --font-size-countdown: 16px;
-  --font-size-quran-arabic: 26px;
-  --font-size-quran-translation: 15px;
-  --font-size-announcement: 18px;
+  --font-size-clock: 72px;
+  --font-size-prayer-name: 24px;
+  --font-size-prayer-time: 28px;
+  --font-size-countdown: 20px;
+  --font-size-quran-arabic: 32px;
+  --font-size-quran-translation: 18px;
+  --font-size-announcement: 22px;
 }
 
 .font-large {
-  --font-size-clock: 88px;
-  --font-size-prayer-name: 30px;
-  --font-size-prayer-time: 34px;
-  --font-size-countdown: 24px;
-  --font-size-quran-arabic: 40px;
-  --font-size-quran-translation: 22px;
-  --font-size-announcement: 28px;
+  --font-size-clock: 104px;
+  --font-size-prayer-name: 38px;
+  --font-size-prayer-time: 42px;
+  --font-size-countdown: 32px;
+  --font-size-quran-arabic: 48px;
+  --font-size-quran-translation: 28px;
+  --font-size-announcement: 34px;
 }
 
 .font-xlarge {
-  --font-size-clock: 104px;
-  --font-size-prayer-name: 36px;
-  --font-size-prayer-time: 40px;
-  --font-size-countdown: 28px;
-  --font-size-quran-arabic: 48px;
-  --font-size-quran-translation: 26px;
-  --font-size-announcement: 32px;
+  --font-size-clock: 120px;
+  --font-size-prayer-name: 44px;
+  --font-size-prayer-time: 48px;
+  --font-size-countdown: 36px;
+  --font-size-quran-arabic: 56px;
+  --font-size-quran-translation: 32px;
+  --font-size-announcement: 40px;
 }

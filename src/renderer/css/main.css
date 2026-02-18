@@ -477,7 +477,7 @@ body.has-bg-image > * {
 }
 
 .btn-primary:hover {
-  background: #C09530;
+  background: #E07800;
 }
 
 .btn-secondary {
@@ -578,7 +578,7 @@ body.has-bg-image > * {
   font-variant-numeric: tabular-nums;
   line-height: 1;
   margin-bottom: 30px;
-  text-shadow: 0 0 40px rgba(255, 215, 0, 0.3);
+  text-shadow: 0 0 40px rgba(255, 111, 0, 0.4);
 }
 
 .big-timer-subtitle {
