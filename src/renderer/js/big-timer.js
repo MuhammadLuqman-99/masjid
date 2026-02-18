@@ -159,12 +159,8 @@ const BigTimer = (() => {
       overlayEl.classList.remove('warning');
     }
 
-    // Bunyi hanya 15 saat terakhir
-    if (secondsLeft <= 15 && secondsLeft > 0) {
-      startBeep();
-    } else {
-      stopBeep();
-    }
+    // Tiada bunyi langsung semasa pre-prayer countdown
+    stopBeep();
   }
 
   // Fasa 2: Popup "Telah Masuk Waktu" selama 15 saat dengan bunyi
@@ -203,12 +199,8 @@ const BigTimer = (() => {
       overlayEl.classList.remove('warning');
     }
 
-    // Bunyi hanya 15 saat terakhir
-    if (secondsLeft <= 15 && secondsLeft > 0) {
-      startBeep();
-    } else {
-      stopBeep();
-    }
+    // Tiada bunyi langsung semasa iqamah countdown
+    stopBeep();
   }
 
   function hideOverlay() {
