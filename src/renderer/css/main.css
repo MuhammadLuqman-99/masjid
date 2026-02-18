@@ -11,360 +11,265 @@ html, body {
   overflow: hidden;
   font-family: var(--font-primary);
   color: var(--color-text-primary);
-  background: var(--color-bg-primary);
+  background: #000;
 }
 
 body {
   display: flex;
   flex-direction: column;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
 }
 
-/* Custom background image overlay */
-body.has-bg-image::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: var(--color-overlay);
-  z-index: 0;
-}
-
-body.has-bg-image > * {
-  position: relative;
-  z-index: 1;
-}
-
-/* ===================== HEADER ===================== */
-.header {
+/* ===================== TOP BAR ===================== */
+.top-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 30px;
+  padding: 8px 24px;
   background: var(--color-header-bg);
-  border-bottom: 2px solid var(--color-accent);
+  border-bottom: 3px solid var(--color-accent);
   min-height: 70px;
   flex-shrink: 0;
+  z-index: 10;
 }
 
-.header-left {
+.top-left {
   display: flex;
-  align-items: center;
-  gap: 16px;
+  align-items: baseline;
+  gap: 4px;
 }
 
-.mosque-logo {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid var(--color-accent);
+.top-left .clock-time {
+  font-size: 52px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: #fff;
 }
 
-.mosque-logo-placeholder {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: var(--color-bg-card);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  border: 2px solid var(--color-accent);
+.top-left .clock-seconds {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--color-accent);
+  margin-left: 2px;
+}
+
+.top-left .clock-period {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-left: 6px;
+}
+
+.top-center {
+  text-align: center;
+  flex: 1;
 }
 
 .mosque-name {
   font-size: var(--font-size-header);
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
   text-transform: uppercase;
+  color: #fff;
 }
 
-.header-right {
+.mosque-address {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  margin-top: 2px;
+}
+
+.top-right {
   text-align: right;
-}
-
-.hijri-date {
-  font-size: var(--font-size-date);
-  color: var(--color-highlight);
-  font-weight: 600;
 }
 
 .gregorian-date {
   font-size: var(--font-size-date);
-  color: var(--color-text-secondary);
-  margin-top: 2px;
-}
-
-/* ===================== MAIN CONTENT ===================== */
-.main-content {
-  display: flex;
-  flex: 1;
-  overflow: hidden;
-}
-
-/* ===== LEFT PANEL - Prayer Times ===== */
-.prayer-panel {
-  width: 35%;
-  min-width: 360px;
-  background: var(--color-bg-secondary);
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  gap: 12px;
-  border-right: 2px solid var(--color-accent-subtle);
-}
-
-/* Clock section */
-.clock-section {
-  text-align: center;
-  padding: 16px;
-  background: var(--color-bg-card);
-  border-radius: var(--border-radius);
-  margin-bottom: 8px;
-}
-
-.clock-time {
-  font-size: var(--font-size-clock);
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 2px;
-  line-height: 1;
-}
-
-.clock-period {
-  font-size: var(--font-size-clock-label);
-  color: var(--color-text-secondary);
-  margin-top: 4px;
-  text-transform: uppercase;
-}
-
-/* Prayer list */
-.prayer-list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  flex: 1;
-}
-
-.prayer-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 18px;
-  border-radius: var(--border-radius-sm);
-  background: var(--color-bg-card);
-  transition: all 0.3s ease;
-}
-
-.prayer-row.next-prayer {
-  background: var(--color-prayer-next-bg);
-  border: 2px solid var(--color-accent);
-}
-
-.prayer-name {
-  font-size: var(--font-size-prayer-name);
+  color: #fff;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
 }
 
-.prayer-time-value {
-  font-size: var(--font-size-prayer-time);
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-}
-
-.prayer-row.next-prayer .prayer-name {
+.hijri-date {
+  font-size: var(--font-size-date);
   color: var(--color-accent);
-}
-
-.prayer-row.next-prayer .prayer-time-value {
-  color: var(--color-highlight);
-}
-
-/* Countdown */
-.countdown-section {
-  text-align: center;
-  padding: 12px;
-  background: var(--color-bg-card);
-  border-radius: var(--border-radius-sm);
-  border: 1px solid var(--color-accent-subtle);
-}
-
-.countdown-label {
-  font-size: 14px;
-  color: var(--color-text-secondary);
-  margin-bottom: 4px;
-  text-transform: uppercase;
-}
-
-.countdown-timer {
-  font-size: var(--font-size-countdown);
-  font-weight: 700;
-  color: var(--color-highlight);
-  font-variant-numeric: tabular-nums;
-}
-
-.countdown-prayer-name {
-  font-size: 14px;
-  color: var(--color-accent);
+  font-weight: 600;
   margin-top: 2px;
 }
 
-/* Iqamah display */
-.iqamah-section {
-  text-align: center;
-  padding: 10px;
-  background: rgba(76, 175, 80, 0.15);
-  border-radius: var(--border-radius-sm);
-  border: 1px solid rgba(76, 175, 80, 0.3);
-}
-
-.iqamah-label {
-  font-size: 14px;
-  color: var(--color-success);
-  text-transform: uppercase;
-}
-
-.iqamah-time {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--color-success);
-}
-
-/* ===== RIGHT PANEL - Content Area ===== */
-.content-panel {
-  width: 65%;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  gap: 20px;
-  overflow: hidden;
-}
-
-/* Announcements */
-.announcement-container {
+/* ===================== MAIN DISPLAY ===================== */
+.main-display {
   flex: 1;
-  background: var(--color-bg-card);
-  border-radius: var(--border-radius);
-  padding: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   position: relative;
   overflow: hidden;
   min-height: 0;
 }
 
-.announcement-slide {
+.bg-image-area {
+  position: absolute;
+  inset: 0;
+  background: url('/images/desa-murni-batik.jpg') center/cover no-repeat;
+  z-index: 0;
+}
+
+/* Announcement overlay - centered on background */
+.announcement-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 20px 40px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, transparent 100%);
+  z-index: 2;
   text-align: center;
-  width: 100%;
 }
 
 .announcement-text {
   font-size: var(--font-size-announcement);
-  line-height: 1.6;
-  color: var(--color-text-primary);
-}
-
-.announcement-image {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  border-radius: var(--border-radius-sm);
+  line-height: 1.5;
+  color: #fff;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
 }
 
 /* Hadith slide styling */
 .hadith-label {
-  font-size: 14px;
+  font-size: 16px;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  color: var(--color-highlight);
-  margin-bottom: 12px;
+  letter-spacing: 3px;
+  color: var(--color-accent);
+  margin-bottom: 8px;
   font-weight: 700;
 }
 
 .hadith-text {
   font-size: var(--font-size-announcement);
-  line-height: 1.7;
-  color: var(--color-text-primary);
+  line-height: 1.6;
+  color: #fff;
   font-style: italic;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
 }
 
-.announcement-dots {
+/* Quran overlay - bottom of image area */
+.quran-overlay {
   position: absolute;
-  bottom: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 8px;
-}
-
-.announcement-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--color-text-muted);
-  transition: background 0.3s;
-}
-
-.announcement-dot.active {
-  background: var(--color-accent);
-}
-
-/* Quran verse */
-.quran-container {
-  flex: 1;
-  background: var(--color-bg-card);
-  border-radius: var(--border-radius);
-  padding: 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px 40px;
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+  z-index: 2;
   text-align: center;
-  min-height: 0;
-  overflow: hidden;
 }
 
 .quran-arabic {
   font-family: var(--font-arabic);
   font-size: var(--font-size-quran-arabic);
-  line-height: 1.8;
-  color: var(--color-highlight);
+  line-height: 1.6;
+  color: var(--color-accent);
   direction: rtl;
-  margin-bottom: 16px;
-  transition: opacity 0.5s ease;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+  margin-bottom: 6px;
 }
 
 .quran-translation {
   font-size: var(--font-size-quran-translation);
-  color: var(--color-text-secondary);
-  line-height: 1.6;
+  color: #fff;
+  line-height: 1.4;
   font-style: italic;
-  max-width: 80%;
-  transition: opacity 0.5s ease;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
 }
 
 .quran-reference {
   font-size: 14px;
   color: var(--color-accent);
-  margin-top: 12px;
+  margin-top: 4px;
   font-weight: 600;
-  transition: opacity 0.5s ease;
 }
 
-/* ===================== FOOTER TICKER ===================== */
+/* ===================== PRAYER TIMES BAR ===================== */
+.prayer-bar {
+  display: flex;
+  gap: 0;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.prayer-card {
+  flex: 1;
+  text-align: center;
+  padding: 10px 4px 12px;
+  background: var(--color-bg-secondary);
+  border-right: 1px solid rgba(255,255,255,0.1);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.prayer-card:last-child {
+  border-right: none;
+}
+
+.prayer-card-name {
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-text-secondary);
+  padding: 6px 0;
+  background: var(--color-bg-card);
+  margin: 0 -4px;
+  margin-top: -10px;
+}
+
+.prayer-card-time {
+  font-size: 36px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+  padding: 8px 0 2px;
+}
+
+.prayer-card-countdown {
+  font-size: 14px;
+  color: var(--color-accent);
+  font-weight: 600;
+  min-height: 18px;
+}
+
+/* Active / next prayer highlight */
+.prayer-card.next-prayer {
+  background: var(--color-active-prayer);
+}
+
+.prayer-card.next-prayer .prayer-card-name {
+  background: var(--color-active-prayer-header);
+  color: #fff;
+}
+
+.prayer-card.next-prayer .prayer-card-time {
+  color: #fff;
+}
+
+.prayer-card.next-prayer .prayer-card-countdown {
+  color: #fff;
+  font-size: 15px;
+}
+
+/* ===================== FOOTER TICKERS ===================== */
 .footer-ticker {
   background: var(--color-footer-bg);
-  border-top: 2px solid var(--color-accent);
-  padding: 8px 0;
+  padding: 6px 0;
   overflow: hidden;
   white-space: nowrap;
-  min-height: 40px;
   flex-shrink: 0;
+  z-index: 10;
+}
+
+.ticker-1 {
+  border-top: 2px solid var(--color-accent);
+}
+
+.ticker-2 {
+  background: var(--color-ticker2-bg);
+  border-top: 1px solid rgba(255,255,255,0.1);
 }
 
 .ticker-text {
@@ -372,9 +277,37 @@ body.has-bg-image > * {
   font-size: var(--font-size-ticker);
   color: var(--color-text-secondary);
   padding-left: 100%;
+  font-weight: 500;
 }
 
-/* ===================== SETTINGS OVERLAY ===================== */
+.ticker-1 .ticker-text {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+/* ===================== SETTINGS ===================== */
+.settings-btn {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  z-index: 100;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.2;
+  transition: opacity 0.3s;
+}
+
+.settings-btn:hover { opacity: 1; }
+
 .settings-overlay {
   display: none;
   position: fixed;
@@ -385,13 +318,11 @@ body.has-bg-image > * {
   align-items: center;
 }
 
-.settings-overlay.active {
-  display: flex;
-}
+.settings-overlay.active { display: flex; }
 
 .settings-panel {
   background: var(--color-bg-secondary);
-  border-radius: var(--border-radius);
+  border-radius: 12px;
   width: 700px;
   max-height: 85vh;
   overflow-y: auto;
@@ -405,13 +336,11 @@ body.has-bg-image > * {
   color: var(--color-accent);
 }
 
-.settings-group {
-  margin-bottom: 24px;
-}
+.settings-group { margin-bottom: 24px; }
 
 .settings-group h3 {
   font-size: 16px;
-  color: var(--color-highlight);
+  color: var(--color-accent);
   margin-bottom: 12px;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -436,27 +365,17 @@ body.has-bg-image > * {
   flex: 1;
   padding: 8px 12px;
   border-radius: 6px;
-  border: 1px solid var(--color-accent-subtle);
+  border: 1px solid rgba(255,255,255,0.2);
   background: var(--color-bg-card);
-  color: var(--color-text-primary);
+  color: #fff;
   font-size: 14px;
   font-family: var(--font-primary);
-}
-
-.settings-row input:focus,
-.settings-row select:focus {
-  outline: none;
-  border-color: var(--color-accent);
 }
 
 .settings-row input[type="color"] {
   width: 50px;
   height: 36px;
   padding: 2px;
-  cursor: pointer;
-}
-
-.settings-row input[type="range"] {
   cursor: pointer;
 }
 
@@ -473,21 +392,15 @@ body.has-bg-image > * {
 
 .btn-primary {
   background: var(--color-accent);
-  color: white;
+  color: #fff;
 }
 
-.btn-primary:hover {
-  background: #E07800;
-}
+.btn-primary:hover { background: var(--color-accent-hover); }
 
 .btn-secondary {
   background: var(--color-bg-card);
-  color: var(--color-text-primary);
+  color: #fff;
   border: 1px solid var(--color-accent);
-}
-
-.btn-secondary:hover {
-  background: var(--color-accent-subtle);
 }
 
 .settings-actions {
@@ -496,122 +409,71 @@ body.has-bg-image > * {
   gap: 12px;
   margin-top: 24px;
   padding-top: 16px;
-  border-top: 1px solid var(--color-accent-subtle);
-}
-
-/* Settings button (floating) */
-.settings-btn {
-  position: fixed;
-  top: 12px;
-  right: 12px;
-  z-index: 100;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--color-accent-subtle);
-  border: 1px solid var(--color-accent);
-  color: var(--color-text-primary);
-  font-size: 20px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.3s;
-  opacity: 0.3;
-}
-
-.settings-btn:hover {
-  opacity: 1;
-  background: var(--color-accent);
-}
-
-/* Source indicator */
-.source-indicator {
-  position: fixed;
-  bottom: 48px;
-  right: 12px;
-  font-size: 11px;
-  color: var(--color-text-muted);
-  opacity: 0.4;
-  z-index: 50;
+  border-top: 1px solid rgba(255,255,255,0.1);
 }
 
 /* ===================== BIG TIMER OVERLAY ===================== */
 .big-timer-overlay {
   display: none;
   position: fixed;
-  inset: 0;
-  z-index: 900;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
   background: var(--color-bg-primary);
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
-.big-timer-overlay.active {
-  display: flex;
-}
+.big-timer-overlay.active { display: flex !important; }
 
 .big-timer-content {
   text-align: center;
   animation: fadeIn 0.5s ease;
+  width: 100%;
+  padding: 40px;
 }
 
-.big-timer-icon {
-  font-size: 80px;
-  margin-bottom: 20px;
-  opacity: 0.6;
-}
+.big-timer-icon { font-size: 100px; margin-bottom: 20px; opacity: 0.7; }
 
 .big-timer-title {
-  font-size: 48px;
+  font-size: 64px;
   font-weight: 700;
-  color: var(--color-text-primary);
+  color: #fff;
   text-transform: uppercase;
-  letter-spacing: 3px;
-  margin-bottom: 30px;
+  letter-spacing: 4px;
+  margin-bottom: 40px;
 }
 
 .big-timer-countdown {
-  font-size: 180px;
+  font-size: 220px;
   font-weight: 700;
-  color: var(--color-highlight);
+  color: var(--color-accent);
   font-variant-numeric: tabular-nums;
   line-height: 1;
-  margin-bottom: 30px;
-  text-shadow: 0 0 40px rgba(255, 111, 0, 0.4);
+  margin-bottom: 40px;
+  text-shadow: 0 0 60px rgba(255, 140, 0, 0.5);
 }
 
 .big-timer-subtitle {
-  font-size: 28px;
+  font-size: 36px;
   color: var(--color-text-secondary);
-  letter-spacing: 1px;
+  letter-spacing: 2px;
 }
 
-/* Iqamah phase - green accent */
-.big-timer-overlay.iqamah-phase .big-timer-title {
-  color: var(--color-accent);
-}
-
+.big-timer-overlay.iqamah-phase .big-timer-title { color: var(--color-accent); }
 .big-timer-overlay.iqamah-phase .big-timer-countdown {
   color: var(--color-success);
-  text-shadow: 0 0 40px rgba(76, 175, 80, 0.3);
+  text-shadow: 0 0 60px rgba(76, 175, 80, 0.4);
 }
 
-/* Warning pulse when under 1 minute */
 .big-timer-overlay.warning .big-timer-countdown {
   animation: countdownPulse 1s ease-in-out infinite;
 }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--color-bg-primary);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-accent);
-  border-radius: 3px;
-}
+/* ===================== SCROLLBAR ===================== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #111; }
+::-webkit-scrollbar-thumb { background: var(--color-accent); border-radius: 3px; }

@@ -17,8 +17,8 @@ const DEFAULT_SETTINGS = {
   mosqueName: 'Surau Desa Murni Gong Kapas',
   mosqueAddress: 'Gong Kapas, Kuala Terengganu',
   theme: {
-    bgPrimary: '#3A1800',
-    bgSecondary: '#4A2208',
+    bgPrimary: '#0D1B2A',
+    bgSecondary: '#1B2838',
     accent: '#FF8C00',
     textPrimary: '#ffffff',
     backgroundImage: '/images/desa-murni-batik.jpg',

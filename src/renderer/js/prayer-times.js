@@ -15,7 +15,6 @@ const PrayerTimes = (() => {
   let countdownIntervalId = null;
   let use12h = true;
 
-  // Convert "HH:MM" (24h) to "h:MM AM/PM" (12h)
   function to12Hour(timeStr) {
     if (!timeStr || timeStr === '--:--') return timeStr;
     const parts = timeStr.split(':');
@@ -52,11 +51,10 @@ const PrayerTimes = (() => {
       }
     }
 
-    // After Isyak, next is Subuh (tomorrow)
     return {
       name: 'subuh',
       label: PRAYER_LABELS.subuh,
-      minutes: timeToMinutes(currentTimes.subuh) + 1440, // +24h
+      minutes: timeToMinutes(currentTimes.subuh) + 1440,
       tomorrow: true,
     };
   }
@@ -64,7 +62,6 @@ const PrayerTimes = (() => {
   function updateDisplay(times) {
     currentTimes = times;
 
-    // Update each prayer time display
     const prayers = ['imsak', 'subuh', 'syuruk', 'zohor', 'asar', 'maghrib', 'isyak'];
     prayers.forEach((prayer) => {
       const el = document.getElementById(`time-${prayer}`);
@@ -78,7 +75,6 @@ const PrayerTimes = (() => {
 
   function setFormat(is24h) {
     use12h = !is24h;
-    // Re-render if we have times
     if (currentTimes) updateDisplay(currentTimes);
   }
 
@@ -86,18 +82,19 @@ const PrayerTimes = (() => {
     const next = getNextPrayer();
     if (!next) return;
 
-    // Remove all highlights
-    document.querySelectorAll('.prayer-row').forEach((row) => {
-      row.classList.remove('next-prayer', 'prayer-active');
+    // Remove all highlights from both old and new layout
+    document.querySelectorAll('.prayer-row, .prayer-card').forEach((el) => {
+      el.classList.remove('next-prayer', 'prayer-active');
     });
 
-    // Add highlight to next prayer
-    const nextRow = document.querySelector(`.prayer-row[data-prayer="${next.name}"]`);
-    if (nextRow) {
-      nextRow.classList.add('next-prayer', 'prayer-active');
-    }
+    // Highlight next prayer card
+    const nextCard = document.querySelector(`.prayer-card[data-prayer="${next.name}"]`);
+    if (nextCard) nextCard.classList.add('next-prayer');
 
-    // Update countdown prayer name
+    // Also support old layout
+    const nextRow = document.querySelector(`.prayer-row[data-prayer="${next.name}"]`);
+    if (nextRow) nextRow.classList.add('next-prayer', 'prayer-active');
+
     const nameEl = document.getElementById('countdownPrayerName');
     if (nameEl) {
       nameEl.textContent = `${next.label}${next.tomorrow ? ' (esok)' : ''}`;
@@ -112,11 +109,9 @@ const PrayerTimes = (() => {
     const nowMinutes = now.getHours() * 60 + now.getMinutes();
     const nowSeconds = nowMinutes * 60 + now.getSeconds();
 
-    let targetMinutes = next.minutes;
-    let targetSeconds = targetMinutes * 60;
-
+    let targetSeconds = next.minutes * 60;
     let diff = targetSeconds - nowSeconds;
-    if (diff < 0) diff += 86400; // wrap to next day
+    if (diff < 0) diff += 86400;
 
     const hours = Math.floor(diff / 3600);
     const minutes = Math.floor((diff % 3600) / 60);
@@ -127,6 +122,17 @@ const PrayerTimes = (() => {
       timerEl.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
     }
 
+    // Update countdown on the active prayer card
+    document.querySelectorAll('.prayer-card-countdown').forEach((el) => {
+      el.textContent = '';
+    });
+
+    const cdEl = document.getElementById(`cd-${next.name}`);
+    if (cdEl) {
+      const cdStr = `-${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      cdEl.textContent = cdStr;
+    }
+
     highlightNextPrayer();
   }
 
@@ -134,13 +140,8 @@ const PrayerTimes = (() => {
     countdownIntervalId = setInterval(updateCountdown, 1000);
   }
 
-  function getTimes() {
-    return currentTimes;
-  }
-
-  function getNextPrayerInfo() {
-    return getNextPrayer();
-  }
+  function getTimes() { return currentTimes; }
+  function getNextPrayerInfo() { return getNextPrayer(); }
 
   function destroy() {
     if (countdownIntervalId) clearInterval(countdownIntervalId);

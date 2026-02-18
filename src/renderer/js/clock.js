@@ -8,6 +8,7 @@ const Clock = (() => {
   };
 
   let clockEl = null;
+  let secondsEl = null;
   let periodEl = null;
   let intervalId = null;
   let format24h = true;
@@ -26,18 +27,22 @@ const Clock = (() => {
     const seconds = String(now.getSeconds()).padStart(2, '0');
 
     if (format24h) {
-      clockEl.textContent = `${String(hours).padStart(2, '0')}:${minutes}:${seconds}`;
+      clockEl.textContent = `${String(hours).padStart(2, '0')} ${minutes}`;
+      if (periodEl) periodEl.textContent = getPeriod(hours);
     } else {
       const ampm = hours >= 12 ? 'PM' : 'AM';
       hours = hours % 12 || 12;
-      clockEl.textContent = `${String(hours).padStart(2, '0')}:${minutes}:${seconds} ${ampm}`;
+      clockEl.textContent = `${String(hours).padStart(2, '0')}:${minutes}`;
+      if (periodEl) periodEl.textContent = ampm;
     }
 
-    periodEl.textContent = getPeriod(now.getHours());
+    // Update separate seconds element if it exists
+    if (secondsEl) secondsEl.textContent = seconds;
   }
 
   function init(options = {}) {
     clockEl = document.getElementById('clockTime');
+    secondsEl = document.getElementById('clockSeconds');
     periodEl = document.getElementById('clockPeriod');
     format24h = options.format24h !== undefined ? options.format24h : true;
 

@@ -2,7 +2,7 @@
 // Shows fullscreen countdown:
 // - Before prayer time: countdown to prayer (e.g. 10 minutes)
 // - At prayer time: iqamah countdown (e.g. 12 minutes)
-// Includes notification sounds via Web Audio API (works offline)
+// Uses MP3 beep sound file (plays continuously during countdown)
 const BigTimer = (() => {
   const PRAYER_LABELS = {
     subuh: 'Subuh',
@@ -23,72 +23,47 @@ const BigTimer = (() => {
   let iqamahMinutes = 12;
   let currentPhase = null; // null, 'pre-prayer', 'iqamah'
   let currentPrayer = null;
-  let iqamahTriggered = new Set(); // track which prayers already triggered iqamah today
+  let iqamahTriggered = new Set();
   let lastDate = null;
-  let audioCtx = null;
   let soundEnabled = true;
+  let beepAudio = null;
+  let isPlaying = false;
 
-  // Initialize Web Audio API context
-  function getAudioContext() {
-    if (!audioCtx) {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  // Initialize MP3 audio element
+  function initAudio() {
+    if (!beepAudio) {
+      beepAudio = new Audio('/audio/beep.mp3');
+      beepAudio.loop = true;
+      beepAudio.volume = 0.8;
+      beepAudio.preload = 'auto';
     }
-    // Resume if suspended (browser autoplay policy)
-    if (audioCtx.state === 'suspended') {
-      audioCtx.resume();
-    }
-    return audioCtx;
   }
 
-  // Play a beep tone using Web Audio API (no external files needed)
-  function playBeep(frequency, duration, volume) {
+  // Start playing beep sound
+  function startBeep() {
+    if (!soundEnabled || isPlaying) return;
     try {
-      const ctx = getAudioContext();
-      const oscillator = ctx.createOscillator();
-      const gainNode = ctx.createGain();
-
-      oscillator.connect(gainNode);
-      gainNode.connect(ctx.destination);
-
-      oscillator.frequency.value = frequency;
-      oscillator.type = 'sine';
-      gainNode.gain.value = volume || 0.3;
-
-      // Fade out to avoid click
-      gainNode.gain.setValueAtTime(volume || 0.3, ctx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (duration || 0.3));
-
-      oscillator.start(ctx.currentTime);
-      oscillator.stop(ctx.currentTime + (duration || 0.3));
+      initAudio();
+      beepAudio.currentTime = 0;
+      beepAudio.play().catch(e => console.log('[BigTimer] Audio play blocked:', e.message));
+      isPlaying = true;
     } catch (e) {
       console.log('[BigTimer] Audio not available:', e.message);
     }
   }
 
-  // Different sound patterns for different events
-  function playPrePrayerAlert() {
-    // 3 ascending tones - "attention, prayer is coming"
-    playBeep(600, 0.2, 0.4);
-    setTimeout(() => playBeep(800, 0.2, 0.4), 250);
-    setTimeout(() => playBeep(1000, 0.4, 0.5), 500);
+  // Stop playing beep sound
+  function stopBeep() {
+    if (beepAudio && isPlaying) {
+      beepAudio.pause();
+      beepAudio.currentTime = 0;
+      isPlaying = false;
+    }
   }
 
-  function playIqamahAlert() {
-    // 3 descending tones then high - "prayer time has arrived"
-    playBeep(1000, 0.2, 0.5);
-    setTimeout(() => playBeep(800, 0.2, 0.5), 300);
-    setTimeout(() => playBeep(600, 0.2, 0.5), 600);
-    setTimeout(() => playBeep(1200, 0.6, 0.6), 900);
-  }
-
-  function playCountdownTick() {
-    // Short tick for last 10 seconds
-    playBeep(880, 0.1, 0.25);
-  }
-
-  function playFinalBeep() {
-    // Long beep for the end
-    playBeep(1047, 0.8, 0.6);
+  // Increase volume for last 30 seconds
+  function setBeepVolume(vol) {
+    if (beepAudio) beepAudio.volume = vol;
   }
 
   function init(settings) {
@@ -102,9 +77,9 @@ const BigTimer = (() => {
       iqamahMinutes = settings.iqamahMinutes || 12;
     }
 
-    // Pre-initialize audio context on first user interaction
-    document.addEventListener('click', () => getAudioContext(), { once: true });
-    document.addEventListener('keydown', () => getAudioContext(), { once: true });
+    // Pre-initialize audio on first user interaction
+    document.addEventListener('click', () => initAudio(), { once: true });
+    document.addEventListener('keydown', () => initAudio(), { once: true });
 
     intervalId = setInterval(check, 1000);
   }
@@ -122,7 +97,6 @@ const BigTimer = (() => {
     const now = new Date();
     const todayStr = now.toDateString();
 
-    // Reset iqamah triggers at midnight
     if (lastDate && lastDate !== todayStr) {
       iqamahTriggered.clear();
     }
@@ -144,7 +118,7 @@ const BigTimer = (() => {
       const preStartSeconds = (prayerMinutes - warningMinutes) * 60;
       const iqamahEndSeconds = prayerSeconds + (iqamahMinutes * 60);
 
-      // Phase 1: Pre-prayer countdown (warningMinutes before prayer)
+      // Phase 1: Pre-prayer countdown
       if (nowSeconds >= preStartSeconds && nowSeconds < prayerSeconds) {
         const diff = prayerSeconds - nowSeconds;
         showPrePrayer(prayer, diff);
@@ -152,7 +126,7 @@ const BigTimer = (() => {
         break;
       }
 
-      // Phase 2: Iqamah countdown (at prayer time, for iqamahMinutes)
+      // Phase 2: Iqamah countdown
       if (nowSeconds >= prayerSeconds && nowSeconds < iqamahEndSeconds) {
         const diff = iqamahEndSeconds - nowSeconds;
         showIqamah(prayer, diff);
@@ -173,8 +147,7 @@ const BigTimer = (() => {
       currentPhase = 'pre-prayer';
       currentPrayer = prayer;
       subtitleEl.textContent = 'Azan akan berkumandang sebentar lagi';
-      // Sound: alert when pre-prayer overlay first appears
-      if (soundEnabled) playPrePrayerAlert();
+      startBeep();
     }
 
     titleEl.textContent = `Waktu ${PRAYER_LABELS[prayer]} Dalam`;
@@ -187,13 +160,11 @@ const BigTimer = (() => {
       overlayEl.classList.remove('warning');
     }
 
-    // Countdown tick for last 10 seconds
-    if (soundEnabled && secondsLeft <= 10 && secondsLeft > 0) {
-      playCountdownTick();
-    }
-    // Final beep at 0
-    if (soundEnabled && secondsLeft === 0) {
-      playFinalBeep();
+    // Louder volume for last 30 seconds
+    if (secondsLeft <= 30) {
+      setBeepVolume(1.0);
+    } else {
+      setBeepVolume(0.8);
     }
   }
 
@@ -204,27 +175,23 @@ const BigTimer = (() => {
       currentPhase = 'iqamah';
       currentPrayer = prayer;
       subtitleEl.textContent = 'Solat akan didirikan sebentar lagi';
-      // Sound: alert when iqamah phase starts
-      if (soundEnabled) playIqamahAlert();
+      startBeep();
     }
 
     titleEl.textContent = `Iqamah ${PRAYER_LABELS[prayer]}`;
     countdownEl.textContent = formatCountdown(secondsLeft);
 
-    // Warning pulse when under 60 seconds
     if (secondsLeft <= 60) {
       overlayEl.classList.add('warning');
     } else {
       overlayEl.classList.remove('warning');
     }
 
-    // Countdown tick for last 10 seconds
-    if (soundEnabled && secondsLeft <= 10 && secondsLeft > 0) {
-      playCountdownTick();
-    }
-    // Final beep at 0
-    if (soundEnabled && secondsLeft === 0) {
-      playFinalBeep();
+    // Louder volume for last 30 seconds
+    if (secondsLeft <= 30) {
+      setBeepVolume(1.0);
+    } else {
+      setBeepVolume(0.8);
     }
   }
 
@@ -232,6 +199,7 @@ const BigTimer = (() => {
     overlayEl.classList.remove('active', 'iqamah-phase', 'warning');
     currentPhase = null;
     currentPrayer = null;
+    stopBeep();
   }
 
   function formatCountdown(totalSeconds) {
@@ -253,20 +221,20 @@ const BigTimer = (() => {
 
   // Test mode: simulate pre-prayer (15s) then iqamah (15s)
   function test() {
-    // Pause real checker during test
     if (intervalId) clearInterval(intervalId);
 
     let testInterval = null;
     let phase = 'pre-prayer';
     let secondsLeft = 15;
 
-    console.log('[BigTimer TEST] Starting demo - 15s pre-prayer then 15s iqamah (with sound)');
+    console.log('[BigTimer TEST] Starting demo - 15s pre-prayer then 15s iqamah (with MP3 beep)');
 
     testInterval = setInterval(() => {
       if (phase === 'pre-prayer') {
         showPrePrayer('zohor', secondsLeft);
         secondsLeft--;
         if (secondsLeft < 0) {
+          stopBeep();
           phase = 'iqamah';
           secondsLeft = 15;
         }
@@ -276,7 +244,6 @@ const BigTimer = (() => {
         if (secondsLeft < 0) {
           hideOverlay();
           clearInterval(testInterval);
-          // Resume real checker
           intervalId = setInterval(check, 1000);
           console.log('[BigTimer TEST] Demo complete');
         }
@@ -287,10 +254,7 @@ const BigTimer = (() => {
   function destroy() {
     if (intervalId) clearInterval(intervalId);
     hideOverlay();
-    if (audioCtx) {
-      audioCtx.close();
-      audioCtx = null;
-    }
+    stopBeep();
   }
 
   return { init, updateSettings, destroy, test, toggleSound };
